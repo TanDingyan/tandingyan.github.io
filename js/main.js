@@ -318,6 +318,19 @@
         card.appendChild(links);
       }
 
+      // 整张卡片可点击：盖一层透明链接在卡片上（卡片内的补充链接 z-index 更高，仍可单独点击）
+      if (project.url) {
+        card.classList.add('is-clickable');
+        var overlay = document.createElement('a');
+        overlay.className = 'project-card-link';
+        overlay.href = project.url;
+        overlay.target = '_blank';
+        overlay.rel = 'noopener noreferrer';
+        overlay.setAttribute('aria-label',
+          t({ zh: '打开项目：', en: 'Open project: ' }) + t(project.title));
+        card.appendChild(overlay);
+      }
+
       return card;
     });
 

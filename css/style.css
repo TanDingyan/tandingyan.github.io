@@ -792,6 +792,9 @@ button {
   margin-top: 18px;
   font-size: 14px;
   font-weight: 500;
+  /* 抬到卡片覆盖链接之上，保证卡片内的补充链接仍可单独点击 */
+  position: relative;
+  z-index: 2;
 }
 .project-links a {
   display: inline-flex;
@@ -799,6 +802,19 @@ button {
   gap: 5px;
 }
 .project-links .icon { width: 14px; height: 14px; }
+
+/* 整张卡片的跳转链接：透明覆盖整张卡片 */
+.project-card.is-clickable { cursor: pointer; }
+.project-card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;      /* 跟随卡片圆角，聚焦描边不会超出 */
+}
+.project-card-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
 
 /* ---------- 9. 时间线 ---------- */
 .timeline {

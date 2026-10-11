@@ -126,6 +126,9 @@ window.SITE_CONFIG = {
       },
       icon: '🎮',
       tags: ['Java', 'Minecraft', 'Gradle'],
+      // url: 点击整张卡片跳转的地址（Modrinth 插件页）；不写则卡片不可点击
+      url: 'https://modrinth.com/plugin/beacongame/',
+      // links: 卡片内的补充链接，显示在卡片底部
       links: [{ label: { zh: '源码', en: 'Source' }, url: 'https://github.com/tandingyan/BeaconGame' }]
     },
     {
@@ -136,7 +139,8 @@ window.SITE_CONFIG = {
       },
       icon: '📖',
       tags: ['JavaScript', 'GitHub Pages'],
-      links: [{ label: { zh: '站点', en: 'Visit' }, url: 'https://tandingyan.github.io/BeaconGameWiki/' }]
+      url: 'https://tandingyan.github.io/BeaconGameWiki/',
+      links: [{ label: { zh: '源码', en: 'Source' }, url: 'https://github.com/tandingyan/BeaconGameWiki' }]
     },
     {
       title: { zh: '个人主页', en: 'Personal Homepage' },
@@ -146,6 +150,7 @@ window.SITE_CONFIG = {
       },
       icon: '🧩',
       tags: ['HTML', 'CSS', 'JavaScript'],
+      url: 'https://tandingyan.github.io/',
       links: [{ label: { zh: '源码', en: 'Source' }, url: 'https://github.com/tandingyan/tandingyan.github.io' }]
     }
   ],
