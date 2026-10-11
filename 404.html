@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--404 页面：独立实现，不加载主页脚本；语言沿用用户在主页的选择（localStorage 键 site-lang） -->
+<html lang="zh-CN" data-theme="light" data-lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>页面走丢了 · 谭鼎言</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/svg+xml" href="./images/favicon.svg" />
+  <link rel="stylesheet" href="./css/style.css" />
+  <script>
+    // 提前应用主题与语言，避免闪烁
+    (function () {
+      try {
+        var theme = localStorage.getItem('site-theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = theme || (prefersDark ? 'dark' : 'light');
+        var lang = localStorage.getItem('site-lang') || 'zh';
+        document.documentElement.dataset.lang = lang;
+        document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+      } catch (e) {
+        document.documentElement.dataset.theme = 'light';
+      }
+    })();
+  </script>
+  <style>
+    /* 404 页专用：只用一个区块居中展示 */
+    .error-page {
+      display: grid;
+      place-items: center;
+      min-height: 100svh;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .error-code {
+      font-family: var(--font-mono);
+      font-size: clamp(72px, 18vw, 150px);
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .error-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 28px;
+    }
+  </style>
+</head>
+<body>
+  <main class="error-page">
+    <div>
+      <p class="error-code">404</p>
+      <h1 class="section-title" style="margin-top: 12px"
+          data-en="This page is missing">这个页面走丢了</h1>
+      <p class="section-desc" data-en="The address you visited doesn't exist, or it has been moved somewhere else.">
+        你访问的地址不存在，或者已经被移动到别处。
+      </p>
+
+      <div class="error-actions">
+        <a class="btn btn-primary" href="./" data-en="Back to Home">返回首页</a>
+        <button class="lang-toggle" id="langToggle" type="button"
+                aria-label="切换语言" title="切换语言 / Switch language">
+          <span id="langLabel">EN</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    /* 语言切换：与主页 js/main.js 使用同一套约定（中文写在元素里，英文在 data-en 里） */
+    (function () {
+      var root = document.documentElement;
+      var nodes = document.querySelectorAll('[data-en]');
+      var label = document.getElementById('langLabel');
+      var toggle = document.getElementById('langToggle');
+
+      function apply(lang) {
+        root.dataset.lang = lang;
+        root.lang = lang === 'en' ? 'en' : 'zh-CN';
+        for (var i = 0; i < nodes.length; i++) {
+          if (!nodes[i].dataset.zh) nodes[i].dataset.zh = nodes[i].textContent;
+          nodes[i].textContent = lang === 'en' ? nodes[i].dataset.en : nodes[i].dataset.zh;
+        }
+        if (label) label.textContent = lang === 'en' ? '中' : 'EN';
+        try {
+          localStorage.setItem('site-lang', lang);
+        } catch (e) { /* 隐私模式下忽略 */ }
+      }
+
+      var saved = 'zh';
+      try { saved = localStorage.getItem('site-lang') || 'zh'; } catch (e) { /* 忽略 */ }
+      apply(saved === 'en' ? 'en' : 'zh');
+
+      if (toggle) {
+        toggle.addEventListener('click', function () {
+          apply(root.dataset.lang === 'en' ? 'zh' : 'en');
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

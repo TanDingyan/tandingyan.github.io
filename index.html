@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<!--
+  个人主页首页
+  ---------------------------------------------------------------------------
+  双语约定：中文写在元素里，英文写在 data-en 属性里。
+  切换语言时 main.js 会自动用 data-en 的内容替换 textContent（并记住选择），
+  所以新增文案时请保持“有中文就有 data-en”。
+-->
+<html lang="zh-CN" data-theme="light" data-lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <title>谭鼎言 · 个人主页</title>
+  <meta name="description" content="谭鼎言的个人主页：个人简介、技术栈、项目作品与联系方式。" />
+  <meta name="author" content="谭鼎言" />
+  <!-- 移动端浏览器地址栏配色 -->
+  <meta name="theme-color" content="#5b5bd6" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0e1015" media="(prefers-color-scheme: dark)" />
+
+  <link rel="icon" type="image/svg+xml" href="./images/favicon.svg" />
+  <link rel="stylesheet" href="./css/style.css" />
+
+  <script>
+    // 提前应用主题与语言：在页面渲染前同步设置，避免刷新时闪烁或语言错乱
+    (function () {
+      try {
+        var theme = localStorage.getItem('site-theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = theme || (prefersDark ? 'dark' : 'light');
+
+        var lang = localStorage.getItem('site-lang') || 'zh';
+        document.documentElement.dataset.lang = lang;
+        document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+      } catch (e) {
+        document.documentElement.dataset.theme = 'light';
+      }
+    })();
+  </script>
+</head>
+
+<body>
+  <!-- 无障碍：键盘用户可直接跳到正文 -->
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <!-- ============ 顶部导航 ============ -->
+  <header class="site-header" id="siteHeader">
+    <nav class="nav container" aria-label="主导航">
+      <a class="nav-brand" href="#top">
+        <span class="nav-logo" aria-hidden="true">TDY</span>
+        <span class="nav-name" data-config="name">谭鼎言</span>
+      </a>
+
+      <!-- 手机端菜单开关 -->
+      <button class="nav-toggle" id="navToggle" type="button"
+              aria-label="打开菜单" aria-expanded="false" aria-controls="navMenu">
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+      </button>
+
+      <ul class="nav-menu" id="navMenu">
+        <li><a class="nav-link" href="#about" data-en="About">关于我</a></li>
+        <li><a class="nav-link" href="#skills" data-en="Skills">技能</a></li>
+        <li><a class="nav-link" href="#projects" data-en="Projects">项目</a></li>
+        <li><a class="nav-link" href="#timeline" data-en="Timeline">经历</a></li>
+        <li><a class="nav-link" href="#contact" data-en="Contact">联系</a></li>
+      </ul>
+
+      <!-- 语言切换：按钮显示“另一种语言”，点击后互换 -->
+      <button class="lang-toggle" id="langToggle" type="button"
+              aria-label="切换语言" title="切换语言 / Switch language">
+        <span id="langLabel">EN</span>
+      </button>
+
+      <!-- 主题切换按钮（浅色 / 深色），点击后写入 localStorage -->
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="切换深色模式" title="切换主题">
+        <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2" />
+          <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6" />
+        </svg>
+        <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 14.2A8.2 8.2 0 019.8 4a8.2 8.2 0 1010.2 10.2z" />
+        </svg>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- ============ 首屏 ============ -->
+    <section class="hero" id="top">
+      <div class="hero-bg" aria-hidden="true">
+        <span class="blob blob-1"></span>
+        <span class="blob blob-2"></span>
+        <span class="grid-mask"></span>
+      </div>
+
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <p class="hero-eyebrow reveal" data-en="Welcome to my little corner of the web">欢迎来到我的小站</p>
+          <h1 class="hero-title reveal">
+            <span class="hero-hello" data-config="greeting" data-en="Hi, I'm">你好，我是</span>
+            <span class="hero-name" data-config="name">谭鼎言</span>
+          </h1>
+          <p class="hero-subtitle reveal" data-config="tagline" data-en="A developer who loves turning ideas into things you can actually run.">
+            一名热爱开发的程序员，喜欢把想法变成可以直接运行的产品。
+          </p>
+
+          <div class="hero-actions reveal">
+            <a class="btn btn-primary" href="#projects">
+              <span data-en="View Projects">查看项目</span>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12.5 6l6 6-6 6" /></svg>
+            </a>
+            <a class="btn btn-ghost" href="#contact" data-en="Get in Touch">联系方式</a>
+          </div>
+
+          <!-- 社交链接由 js/config.js 的 social 数组渲染 -->
+          <ul class="social-list reveal" id="socialList" aria-label="社交链接"></ul>
+        </div>
+
+        <div class="hero-avatar reveal">
+          <div class="avatar-frame">
+            <img id="avatarImg" src="./images/avatar.svg" alt="头像" width="280" height="280" />
+          </div>
+          <div class="avatar-badge" aria-hidden="true">👋</div>
+        </div>
+      </div>
+
+      <a class="hero-scroll" href="#about" aria-label="向下滚动查看更多">
+        <span class="hero-scroll-dot"></span>
+      </a>
+    </section>
+
+    <!-- ============ 关于我 ============ -->
+    <section class="section" id="about">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-eyebrow">ABOUT</p>
+          <h2 class="section-title" data-en="About">关于我</h2>
+          <p class="section-desc" data-en="A short introduction about me.">这里放一段你自己的介绍。</p>
+        </header>
+
+        <div class="about-grid">
+          <div class="about-text reveal">
+            <p data-en="Hi, I'm TanDingYan. This is my personal homepage — a place for the projects I've built, the technologies I'm learning, and a few notes along the way.">
+              你好呀，我是谭鼎言。这里是我的个人主页，用来展示我做过的项目、正在研究的技术，以及一些平时的记录。
+            </p>
+            <p data-en="I like breaking complicated problems into small modules that actually run, then polishing them one by one. In my free time I tinker with Minecraft plugins, write small tools and mess around with websites and deployments.">
+              我喜欢把复杂的问题拆解成一个个能跑起来的小模块，然后不断打磨它们。空闲的时候喜欢折腾 Minecraft 插件、写一些小工具、折腾网站和部署。
+            </p>
+            <p data-en="If you're doing similar things, feel free to reach out any time 👇">
+              如果你也在做类似的事情，欢迎随时找我交流 👇
+            </p>
+
+            <div class="about-tags" id="aboutTags">
+              <span class="tag" data-en="Open Source">开源爱好者</span>
+              <span class="tag" data-en="Systems">系统与底层</span>
+              <span class="tag" data-en="Plugin Dev">插件开发</span>
+              <span class="tag" data-en="Front-end">前端折腾</span>
+            </div>
+          </div>
+
+          <!-- 右侧速览卡片：内容也由 config.js 的 aboutFacts 渲染（下方为默认内容） -->
+          <aside class="fact-card reveal" id="factCard" aria-label="基本信息">
+            <div class="fact-row">
+              <span class="fact-label" data-en="Location">坐标</span>
+              <span class="fact-value" data-en="Beijing, China">中国 · 北京</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label" data-en="Role">身份</span>
+              <span class="fact-value" data-en="Developer">开发者</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label" data-en="Languages">语言</span>
+              <span class="fact-value" data-en="Chinese / English">中文 / English</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-label" data-en="Status">当前状态</span>
+              <span class="fact-value" data-en="Developing"><span class="dot-online"></span>开发中</span>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 技能 ============ -->
+    <section class="section section-alt" id="skills">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-eyebrow">SKILLS</p>
+          <h2 class="section-title" data-en="Tech Stack">技术栈</h2>
+          <p class="section-desc" data-en="Ratings are self-assessed; they mainly reflect what I work with most often.">
+            熟练度只是自我评估，主要代表我日常用得最多的部分。
+          </p>
+        </header>
+
+        <!-- 列表由 js/config.js 的 skills 渲染；以下为禁用 JS 时的默认内容 -->
+        <div class="skills-grid" id="skillsList">
+          <div class="skill-card">
+            <div class="skill-head"><h3 class="skill-name">Python</h3><span class="skill-value">88%</span></div>
+            <div class="skill-bar"><i style="--value:88%"></i></div>
+            <p class="skill-note" data-en="Scripting, automation and data wrangling.">脚本、自动化、数据处理。</p>
+          </div>
+          <div class="skill-card">
+            <div class="skill-head"><h3 class="skill-name">C++</h3><span class="skill-value">82%</span></div>
+            <div class="skill-bar"><i style="--value:82%"></i></div>
+            <p class="skill-note" data-en="Algorithms, graphics and performance work.">算法、图形、性能相关。</p>
+          </div>
+          <div class="skill-card">
+            <div class="skill-head"><h3 class="skill-name">Java / Kotlin</h3><span class="skill-value">70%</span></div>
+            <div class="skill-bar"><i style="--value:70%"></i></div>
+            <p class="skill-note" data-en="Server-side development, plugins and desktop tools.">服务端开发、插件开发、桌面工具。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 项目 ============ -->
+    <section class="section" id="projects">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-eyebrow">PROJECTS</p>
+          <h2 class="section-title" data-en="Projects">项目作品</h2>
+          <p class="section-desc" data-en="Projects I've built — and a few that are still in the works.">
+            一些自己做的、正在做的项目。
+          </p>
+        </header>
+
+        <!-- 由 js/config.js 的 projects 渲染 -->
+        <div class="projects-grid" id="projectsList">
+          <article class="project-card">
+            <div class="project-icon" aria-hidden="true">🚀</div>
+            <h3 class="project-title">项目一</h3>
+            <p class="project-desc" data-en="Add a short description of this project here.">在这里写项目的简短介绍。</p>
+            <div class="project-tags"><span class="tag">Python</span></div>
+          </article>
+          <article class="project-card">
+            <div class="project-icon" aria-hidden="true">🧩</div>
+            <h3 class="project-title">项目二</h3>
+            <p class="project-desc" data-en="Add a short description of this project here.">在这里写项目的简短介绍。</p>
+            <div class="project-tags"><span class="tag">C++</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 经历 ============ -->
+    <section class="section section-alt" id="timeline">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-eyebrow">TIMELINE</p>
+          <h2 class="section-title" data-en="Timeline">成长记录</h2>
+          <p class="section-desc" data-en="A quick introduction in the form of a timeline.">时间线形式的自我介绍。</p>
+        </header>
+
+        <!-- 由 js/config.js 的 timeline 渲染 -->
+        <ol class="timeline" id="timelineList">
+          <li class="timeline-item">
+            <div class="timeline-marker" aria-hidden="true"></div>
+            <div class="timeline-body">
+              <span class="timeline-period">2026 — 至今</span>
+              <h3 class="timeline-title" data-en="Building projects">把项目做出来</h3>
+              <p class="timeline-desc" data-en="Learning by building — turning my own ideas into real, maintainable projects.">
+                一边学习一边做自己的项目，尝试把想法真正落地并维护下去。
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ 联系 ============ -->
+    <section class="section" id="contact">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="section-eyebrow">CONTACT</p>
+          <h2 class="section-title" data-en="Get in Touch">联系我</h2>
+          <p class="section-desc" data-en="Collaboration, questions, or just saying hi — all welcome.">
+            合作、交流、或者只是打个招呼，都欢迎。
+          </p>
+        </header>
+
+        <div class="contact-card reveal">
+          <p class="contact-text" data-en="The easiest way to reach me is email — I'll try to reply as soon as I can.">
+            最方便的方式是邮件，看到我会尽量回复。
+          </p>
+          <!-- 点击邮箱可一键复制，由 js/main.js 处理 -->
+          <button class="email-chip" id="copyEmail" type="button" title="点击复制邮箱">
+            <span id="emailText">maomao15711478047@88.com</span>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="9" y="9" width="11" height="11" rx="2.5" />
+              <path d="M5 15V6.5A2.5 2.5 0 017.5 4H15" />
+            </svg>
+          </button>
+
+          <ul class="social-list social-list-center" id="socialListFooter" aria-label="社交链接"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>
+        © <span id="currentYear">2026</span> <span data-config="name">谭鼎言</span>
+        · <span data-en="Made with curiosity">用心折腾的角落</span>
+      </p>
+      <p class="footer-tech" data-en="Built with plain HTML / CSS / JavaScript, hosted on GitHub Pages">
+        纯 HTML / CSS / JavaScript 构建，部署于 GitHub Pages
+      </p>
+    </div>
+  </footer>
+
+  <!-- 返回顶部 -->
+  <button class="to-top" id="toTop" type="button" aria-label="返回顶部">
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" /></svg>
+  </button>
+
+  <!-- 轻提示（复制邮箱等操作的结果） -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- 注意：路径一律使用相对路径，保证 GitHub Pages 与本地预览都能正常加载 -->
+  <script src="./js/config.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+</html>
