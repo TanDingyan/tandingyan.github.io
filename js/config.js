@@ -152,6 +152,28 @@ window.SITE_CONFIG = {
       tags: ['HTML', 'CSS', 'JavaScript'],
       url: 'https://tandingyan.github.io/',
       links: [{ label: { zh: '源码', en: 'Source' }, url: 'https://github.com/tandingyan/tandingyan.github.io' }]
+    },
+    {
+      title: "Maomao's MiniGame Server",
+      desc: {
+        zh: '我的 Minecraft 服务器，提供各种原创小游戏。',
+        en: 'My Minecraft server, offering a variety of original mini-games.'
+      },
+      icon: '🛡️',
+      tags: ['Minecraft', 'Server', 'Mini-games'],
+      url: 'https://modrinth.com/server/maomaos-minigame-server',
+      links: [{ label: { zh: 'Modrinth', en: 'Modrinth' }, url: 'https://modrinth.com/server/maomaos-minigame-server' }]
+    },
+    {
+      title: "Maomao's MiniGame Server Wiki",
+      desc: {
+        zh: '配套的静态 Wiki 站点，纯 HTML/CSS/JS 编写，部署在 GitHub Pages 上。',
+        en: 'The companion static wiki site — plain HTML/CSS/JS, deployed on GitHub Pages.'
+      },
+      icon: '📘',
+      tags: ['JavaScript', 'GitHub Pages'],
+      url: 'https://tandingyan.github.io/Maomao-s-MiniGame-Server-Wiki/',
+      links: [{ label: { zh: '源码', en: 'Source' }, url: 'https://github.com/tandingyan/Maomao-s-MiniGame-Server-Wiki' }]
     }
   ],
 
