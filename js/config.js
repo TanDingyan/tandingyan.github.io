@@ -143,17 +143,6 @@ window.SITE_CONFIG = {
       links: [{ label: { zh: '源码', en: 'Source' }, url: 'https://github.com/tandingyan/BeaconGameWiki' }]
     },
     {
-      title: { zh: '个人主页', en: 'Personal Homepage' },
-      desc: {
-        zh: '就是你现在看到的这个站点：零依赖、无构建步骤，改完内容直接推送到 GitHub 就上线。',
-        en: 'The site you are looking at: zero dependencies, no build step — edit the content, push to GitHub, and it goes live.'
-      },
-      icon: '🧩',
-      tags: ['HTML', 'CSS', 'JavaScript'],
-      url: 'https://tandingyan.github.io/',
-      links: [{ label: { zh: '源码', en: 'Source' }, url: 'https://github.com/tandingyan/tandingyan.github.io' }]
-    },
-    {
       title: "Maomao's MiniGame Server",
       desc: {
         zh: '我的 Minecraft 服务器，提供各种原创小游戏。',
