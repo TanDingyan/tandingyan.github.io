@@ -103,6 +103,7 @@
     applyStaticLang();     // 先替换静态文案
     fillContent();         // 再按新语言重新渲染动态内容
     observeReveal();       // 新生成的卡片继续走进场动画
+    if (repickQuote) repickQuote();   // 语录同步切换语言
     syncLangButton();
   }
 
@@ -318,6 +319,11 @@
         card.appendChild(links);
       }
 
+      // 记录标签，供项目筛选使用（空格分隔写进 data-tags）
+      if (project.tags && project.tags.length) {
+        card.dataset.tags = project.tags.join(' ');
+      }
+
       // 整张卡片可点击：盖一层透明链接在卡片上（卡片内的补充链接 z-index 更高，仍可单独点击）
       if (project.url) {
         card.classList.add('is-clickable');
@@ -373,6 +379,198 @@
 
       li.appendChild(body);
       return li;
+    });
+
+    // 语言切换后会重建卡片，重新生成筛选栏与打字机（避免旧定时器/旧标签残留）
+    buildProjectFilter();
+    startTypewriter();
+  }
+
+  /* ---------------- 2.5 趣味互动功能 ---------------- */
+
+  /** 首屏打字机：循环展示 taglines，逐字出现并带回退效果 */
+  var typeTimer = null;
+  function startTypewriter() {
+    var el = document.getElementById('heroSubtitle');
+    if (!el) return;
+
+    var list = (config.taglines || []).map(t).filter(Boolean);
+    if (!list.length) return;
+
+    // 尊重“减少动态效果”：直接显示首条，不做动画
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      clearTimeout(typeTimer);
+      el.textContent = list[0];
+      el.classList.remove('typing');
+      return;
+    }
+
+    clearTimeout(typeTimer);
+    el.classList.add('typing');
+
+    var idx = 0, pos = 0, deleting = false;
+
+    function tick() {
+      var full = list[idx];
+      if (!deleting) {
+        pos++;
+        el.textContent = full.slice(0, pos);
+        if (pos >= full.length) {
+          deleting = true;
+          typeTimer = setTimeout(tick, 1700);          // 完整展示后停顿一下
+        } else {
+          typeTimer = setTimeout(tick, 55 + Math.random() * 45);
+        }
+      } else {
+        pos--;
+        el.textContent = full.slice(0, pos);
+        if (pos <= 0) {
+          deleting = false;
+          idx = (idx + 1) % list.length;               // 换下一句
+          typeTimer = setTimeout(tick, 350);
+        } else {
+          typeTimer = setTimeout(tick, 30);
+        }
+      }
+    }
+    tick();
+  }
+
+  /** 实时时钟：显示北京（Asia/Shanghai）当前时间 + 白天/夜晚图标 */
+  function initClock() {
+    var el = document.getElementById('heroClock');
+    if (!el) return;
+
+    var zoneLabel = { zh: '北京', en: 'Beijing' };
+
+    function update() {
+      var parts = new Intl.DateTimeFormat('zh-CN', {
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false, timeZone: 'Asia/Shanghai'
+      }).format(new Date());
+
+      // 取“时”判断白天/夜晚（北京时间）
+      var hour = parseInt(parts.slice(0, 2), 10) || 0;
+      var isDay = hour >= 6 && hour < 18;
+      var icon = isDay ? '☀️' : '🌙';
+
+      el.innerHTML =
+        icon + ' <span class="clock-zone">' + t(zoneLabel) + '</span>' +
+        ' <span class="clock-time">' + parts + '</span>';
+    }
+
+    update();
+    setInterval(update, 1000);
+  }
+
+  /** 今日一句：随机展示一条语录，点击按钮换一条 */
+  function initQuote() {
+    var text = document.getElementById('quoteText');
+    var btn = document.getElementById('quoteShuffle');
+    var list = (config.quotes || []).map(t).filter(Boolean);
+    if (!text || !list.length) return;
+
+    var lastIndex = -1;
+    function pick() {
+      var i;
+      do { i = Math.floor(Math.random() * list.length); }
+      while (i === lastIndex && list.length > 1);   // 避免连续重复
+      lastIndex = i;
+      text.textContent = list[i];
+      // 轻微淡入
+      text.style.opacity = '0';
+      requestAnimationFrame(function () {
+        text.style.transition = 'opacity 0.35s ease';
+        text.style.opacity = '1';
+      });
+    }
+
+    pick();
+    if (btn) btn.addEventListener('click', pick);
+
+    // 语言切换后，语录也要换成对应语言
+    return pick;
+  }
+
+  /** 项目标签筛选：根据项目标签生成筛选条，点击后过滤卡片 */
+  function buildProjectFilter() {
+    var bar = document.getElementById('filterBar');
+    var grid = document.getElementById('projectsList');
+    if (!bar || !grid) return;
+
+    // 收集所有标签（去重，保持出现顺序）
+    var tags = [];
+    var seen = {};
+    (config.projects || []).forEach(function (p) {
+      (p.tags || []).forEach(function (tag) {
+        var key = t(tag);            // 标签也可能双语
+        if (!seen[key]) { seen[key] = true; tags.push(key); }
+      });
+    });
+
+    bar.innerHTML = '';
+    var allChip = makeChip({ zh: '全部', en: 'All' }, true);
+    bar.appendChild(allChip);
+
+    var cards = grid.querySelectorAll('.project-card');
+
+    function applyFilter(activeTag) {
+      // 更新按钮高亮
+      var chips = bar.querySelectorAll('.filter-chip');
+      for (var c = 0; c < chips.length; c++) {
+        chips[c].classList.toggle('is-active', chips[c].dataset.tag === activeTag);
+      }
+      // 过滤卡片
+      for (var i = 0; i < cards.length; i++) {
+        var cardTags = (cards[i].dataset.tags || '').split(' ');
+        var show = !activeTag || cardTags.indexOf(activeTag) !== -1;
+        cards[i].classList.toggle('is-hidden', !show);
+      }
+    }
+
+    allChip.addEventListener('click', function () { applyFilter(''); });
+
+    tags.forEach(function (tag) {
+      var chip = makeChip(tag, false);
+      chip.dataset.tag = tag;
+      chip.addEventListener('click', function () { applyFilter(tag); });
+      bar.appendChild(chip);
+    });
+
+    applyFilter('');
+
+    function makeChip(label, active) {
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'filter-chip' + (active ? ' is-active' : '');
+      chip.textContent = t(label);
+      return chip;
+    }
+  }
+
+  /** 点击头像打招呼：挥手动画 + 冒出表情 */
+  function initAvatarWave() {
+    var frame = document.getElementById('avatarFrame');
+    if (!frame) return;
+
+    function wave() {
+      frame.classList.remove('is-waving');
+      // 强制重排以便重新触发动画
+      void frame.offsetWidth;
+      frame.classList.add('is-waving');
+
+      var pop = document.createElement('span');
+      pop.className = 'wave-pop';
+      pop.textContent = '👋';
+      frame.appendChild(pop);
+      setTimeout(function () {
+        if (pop.parentNode) pop.parentNode.removeChild(pop);
+      }, 1200);
+    }
+
+    frame.addEventListener('click', wave);
+    frame.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); wave(); }
     });
   }
 
@@ -467,11 +665,15 @@
       })
       .filter(Boolean);
 
-    // 滚动：更新导航栏背景与返回顶部按钮
+    // 滚动：更新导航栏背景、返回顶部按钮与顶部阅读进度条
+    var progress = document.getElementById('scrollProgress');
     function onScroll() {
       var y = window.pageYOffset || document.documentElement.scrollTop;
+      var doc = document.documentElement;
+      var max = (doc.scrollHeight - doc.clientHeight) || 1;
       if (header) header.classList.toggle('is-scrolled', y > 12);
       if (toTop) toTop.classList.toggle('is-visible', y > 500);
+      if (progress) progress.style.width = Math.min(100, (y / max) * 100) + '%';
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
@@ -584,11 +786,16 @@
   }
 
   /* ---------------- 启动 ---------------- */
+  var repickQuote = null;   // 语言切换时用来刷新“今日一句”的回调
+
   function init() {
     initLang();        // 内部会调用 fillContent() 渲染当前语言
     initTheme();
     initMobileNav();
     initScrollSpy();
+    initClock();          // 实时时钟
+    initAvatarWave();     // 头像打招呼
+    repickQuote = initQuote();   // 今日一句（返回换句回调，供语言切换使用）
     observeReveal();     // 收集进场动画节点（切换语言时由 setLang 再次调用）
     initMisc();
   }

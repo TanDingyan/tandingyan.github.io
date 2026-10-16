@@ -43,6 +43,9 @@
   <!-- 无障碍：键盘用户可直接跳到正文 -->
   <a class="skip-link" href="#main">跳到主要内容</a>
 
+  <!-- 顶部阅读进度条 -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
   <!-- ============ 顶部导航 ============ -->
   <header class="site-header" id="siteHeader">
     <nav class="nav container" aria-label="主导航">
@@ -93,6 +96,7 @@
         <span class="blob blob-1"></span>
         <span class="blob blob-2"></span>
         <span class="grid-mask"></span>
+        <span class="stars"></span>
       </div>
 
       <div class="container hero-inner">
@@ -102,9 +106,10 @@
             <span class="hero-hello" data-config="greeting" data-en="Hi, I'm">你好，我是</span>
             <span class="hero-name" data-config="name">谭鼎言</span>
           </h1>
-          <p class="hero-subtitle reveal" data-config="tagline" data-en="A developer who loves turning ideas into things you can actually run.">
-            一名热爱开发的程序员，喜欢把想法变成可以直接运行的产品。
-          </p>
+          <!-- 实时时钟：显示北京当前时间（含白天/夜晚图标） -->
+          <p class="hero-clock reveal" id="heroClock" aria-live="off"></p>
+          <!-- 打字机循环展示 taglines，由 js/main.js 写入 -->
+          <p class="hero-subtitle reveal" id="heroSubtitle" aria-live="polite"></p>
 
           <div class="hero-actions reveal">
             <a class="btn btn-primary" href="#projects">
@@ -119,7 +124,8 @@
         </div>
 
         <div class="hero-avatar reveal">
-          <div class="avatar-frame">
+          <div class="avatar-frame" id="avatarFrame" role="button" tabindex="0"
+               aria-label="向我打招呼" title="点我打招呼">
             <img id="avatarImg" src="./images/avatar.svg" alt="头像" width="280" height="280" />
           </div>
           <div class="avatar-badge" aria-hidden="true">👋</div>
@@ -183,6 +189,21 @@
       </div>
     </section>
 
+    <!-- ============ 今日一句 ============ -->
+    <section class="section section-quote" id="quote">
+      <div class="container">
+        <figure class="quote-card reveal">
+          <span class="quote-mark" aria-hidden="true">“</span>
+          <blockquote class="quote-text" id="quoteText"></blockquote>
+          <figcaption class="quote-action">
+            <button class="quote-shuffle" id="quoteShuffle" type="button" data-en="Another one">
+              换一句
+            </button>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
     <!-- ============ 技能 ============ -->
     <section class="section section-alt" id="skills">
       <div class="container">
@@ -225,6 +246,9 @@
             一些自己做的、正在做的项目。
           </p>
         </header>
+
+        <!-- 标签筛选：由 js/main.js 根据项目标签自动生成 -->
+        <div class="filter-bar reveal" id="filterBar" aria-label="项目筛选"></div>
 
         <!-- 由 js/config.js 的 projects 渲染 -->
         <div class="projects-grid" id="projectsList">

@@ -25,12 +25,26 @@ window.SITE_CONFIG = {
   name: '谭鼎言',
   nameEn: 'TanDingYan',
 
-  // 首屏招呼语与副标题
+  // 首屏招呼语
   greeting: { zh: '你好，我是', en: "Hi, I'm" },
-  tagline: {
-    zh: '一名热爱开发的程序员，喜欢把想法变成可以直接运行的产品。',
-    en: 'A developer who loves turning ideas into things you can actually run.'
-  },
+
+  // 首屏副标题：打字机循环展示，下面每条都是一个 { zh, en } 文案
+  taglines: [
+    { zh: '一名热爱开发的程序员，喜欢把想法变成可以直接运行的产品。', en: 'A developer who loves turning ideas into things you can actually run.' },
+    { zh: '用代码把脑洞一点点变成现实。', en: 'Turning random ideas into reality, one build at a time.' },
+    { zh: '白天写插件，晚上折腾网站。', en: 'Writing plugins by day, tinkering with sites by night.' },
+    { zh: '正在学习，也正在创造。', en: 'Always learning, and always making something.' }
+  ],
+
+  // “今日一句”随机语录（点击可换一句），同样 { zh, en }
+  quotes: [
+    { zh: '把复杂的事情做简单，就是一种能力。', en: 'Making the complex simple is a real kind of skill.' },
+    { zh: '能跑起来的想法，比完美的草稿更有趣。', en: 'An idea that runs beats a perfect draft.' },
+    { zh: '折腾，是程序员最浪漫的浪漫。', en: 'Tinkering is a programmer\'s quiet kind of romance.' },
+    { zh: '今天的小工具，也许是明天的大项目。', en: 'Today\'s tiny tool might be tomorrow\'s big project.' },
+    { zh: '保持好奇，保持折腾。', en: 'Stay curious, keep building.' },
+    { zh: '代码会过时，但解决问题的快乐不会。', en: 'Code ages; the joy of solving stays.' }
+  ],
 
   // 头像地址（相对路径）
   avatar: './images/avatar.svg',
