@@ -19,11 +19,11 @@ window.SITE_CONFIG = {
   lang: 'zh',
 
   // 站点标题，会自动写入浏览器标签页
-  title: { zh: '谭鼎言 · 个人主页', en: 'TanDingYan · Homepage' },
+  title: { zh: 'TanDingyan · 个人主页', en: 'TanDingyan · Homepage' },
 
-  // 中文名 / 英文名，英文语言下会显示 nameEn
-  name: '谭鼎言',
-  nameEn: 'TanDingYan',
+  // 显示名（中英文统一用 TanDingyan，避免暴露中文真名）
+  name: 'TanDingyan',
+  nameEn: 'TanDingyan',
 
   // 首屏招呼语
   greeting: { zh: '你好，我是', en: "Hi, I'm" },
