@@ -47,7 +47,7 @@ window.SITE_CONFIG = {
   ],
 
   // 头像地址（相对路径）
-  avatar: './images/avatar.svg',
+  avatar: './images/avatar.jpg',
 
   // 邮箱（页面上点击可一键复制）
   email: 'maomao15711478047@88.com',
